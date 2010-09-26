@@ -1,3 +1,7 @@
+const DIFF_NONE    = 0;
+const DIFF_ADDED   = 1;
+const DIFF_DELETED = 2;
+
 function filled(len, c) {
     var array = new Array(len);
     for (var i = 0; i < array.length; ++i)
@@ -20,14 +24,16 @@ function zipDiffs(a, b, a_deleted, b_added) {
         for (var i = a_done_idx; i < a.length; a_done_idx = ++i) {
             if (!a_deleted[i]) {
                 if (!current_hank_end) {
-                    buffer.push("|   | " + a[i]);
+                    // buffer.push("|   | " + a[i]);
+                    buffer.push({ value : a[i], status : DIFF_NONE });
                     a_done_idx = ++i;
                 }
 
                 break;
             }
 
-            buffer.push("| - | " + a[i]);
+            buffer.push({ value : a[i], status : DIFF_DELETED });
+            // buffer.push("| - | " + a[i]);
             current_hank_end = true;
         }
 
@@ -36,11 +42,12 @@ function zipDiffs(a, b, a_deleted, b_added) {
                 b_done_idx = ++j;
                 break;
             }
-            buffer.push("| + | " + b[j]);
+            buffer.push({ value : b[j], status : DIFF_ADDED });
+            // buffer.push("| + | " + b[j]);
         }
     }
 
-    return buffer.join("\n");
+    return buffer;
 }
 
 function diff(a, b) {
@@ -91,5 +98,23 @@ function diffString(_a, _b) {
     var b = _b.split("\n");
     var d = diff(a, b);
 
-    return zipDiffs(a, b, d.deleted, d.added);
+    var zipped = zipDiffs(a, b, d.deleted, d.added);
+
+    return zipped.map(function (l) {
+        var prefix;
+
+        switch (l.status) {
+        case DIFF_NONE:
+            prefix = " ";
+            break;
+        case DIFF_ADDED:
+            prefix = "+";
+            break;
+        case DIFF_DELETED:
+            prefix = "-";
+            break;
+        }
+
+        return "| " + prefix + " | " + l.value;
+    }).join("\n");
 }
