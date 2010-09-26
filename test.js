@@ -11,6 +11,6 @@ var b = [
     "HeheHe"
 ].join("\n");
 
-var d = diff(a, b);
+var d = diff(read("a.txt"), read("b.txt"));
 
 console.log(d);
