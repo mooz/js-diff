@@ -43,10 +43,7 @@ function zipDiffs(a, b, a_deleted, b_added) {
     return buffer.join("\n");
 }
 
-function diff(_a, _b) {
-    var a = _a.split("\n");
-    var b = _b.split("\n");
-
+function diff(a, b) {
     // var diffs = [];
 
     var a_len = a.length;
@@ -80,5 +77,19 @@ function diff(_a, _b) {
         a_deleted[i] = true;
     }
 
-    return zipDiffs(a, b, a_deleted, b_added);
+    for (var k = b_seek_from; k < b_len; ++k)
+        b_added[k] = true;
+
+    return {
+        "deleted" : a_deleted,
+        "added"   : b_added
+    };
+}
+
+function diffString(_a, _b) {
+    var a = _a.split("\n");
+    var b = _b.split("\n");
+    var d = diff(a, b);
+
+    return zipDiffs(a, b, d.deleted, d.added);
 }
