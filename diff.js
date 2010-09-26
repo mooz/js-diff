@@ -7,7 +7,6 @@ function filled(len, c) {
 
 function zipDiffs(a, b, a_deleted, b_added) {
     var a_done_idx = 0, b_done_idx = 0;
-
     var buffer = [];
 
     for (;;) {
@@ -17,13 +16,19 @@ function zipDiffs(a, b, a_deleted, b_added) {
             break;
         }
 
+        var current_hank_end = false;
         for (var i = a_done_idx; i < a.length; a_done_idx = ++i) {
             if (!a_deleted[i]) {
-                buffer.push("|   | " + a[i]);
-                a_done_idx = ++i;
+                if (!current_hank_end) {
+                    buffer.push("|   | " + a[i]);
+                    a_done_idx = ++i;
+                }
+
                 break;
             }
+
             buffer.push("| - | " + a[i]);
+            current_hank_end = true;
         }
 
         for (var j = b_done_idx; j < b.length; b_done_idx = ++j) {
