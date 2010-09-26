@@ -65,7 +65,8 @@ function diff(_a, _b) {
                 // 一致した. a の i 行目は削除されていない
                 a_deleted[i] = false;
 
-                //  b の 0 ~ j - 1 行目までは「追加されたことが確定」
+                // b の 0 ~ j - 1 行目までは「追加されたことが確定」
+
                 for (var k = b_seek_from; k < j; ++k)
                     b_added[k] = true;
 
@@ -78,9 +79,6 @@ function diff(_a, _b) {
         // 一つも一致しなかった. a の i 行目は削除されたことが確定.
         a_deleted[i] = true;
     }
-
-    console.dir(a_deleted);
-    console.dir(b_added);
 
     return zipDiffs(a, b, a_deleted, b_added);
 }
