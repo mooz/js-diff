@@ -1,0 +1,36 @@
+#diff-result {
+    border      : 1px solid black;
+    padding     : 0;
+    font-family : Monaco, Consolas, "Bitstream Vera Sans Mono", monospace;
+    display     : block;
+}
+
+#diff-result > pre {
+    height  : 1.2em;
+    margin  : 0px;
+    padding : 3 5px;
+}
+
+.diff-none:before, .diff-added:before, .diff-deleted:before {
+    width : 20px;
+}
+
+.diff-added:before {
+    content : "+";
+}
+
+.diff-deleted:before {
+    content : "-";
+}
+
+.diff-none {
+    background-color : #fafafa;
+}
+
+.diff-added {
+    background-color : #e1ffb0;
+}
+
+.diff-deleted {
+    background-color : #f2d3e6;
+}

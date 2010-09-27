@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <title>Diff in JavaScript</title>
+        <script type="text/javascript" src="../diff.js"></script>
+        <script type="text/javascript" src="test.js"></script>
+        <link rel="stylesheet" href="./test.css" type="text/css"/>
+    </head>
+    <body>
+        <div id="container">
+            <h2>Select Text Files</h2>
+
+            <dl>
+                <dt>File A</dt>
+                <dd><input type="file" id="input-file-a" /></dd>
+
+                <dt>File B</dt>
+                <dd><input type="file" id="input-file-b" /></dd>
+            </dl>
+
+            <input type="button" id="diff-button" value="Diff" />
+
+            <h2>Diff Result</h2>
+            <div id="diff-result"></div>
+        </div>
+    </body>
+</html>
