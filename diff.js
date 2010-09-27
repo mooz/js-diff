@@ -20,30 +20,24 @@ function zipDiffs(a, b, a_deleted, b_added) {
             break;
         }
 
-        var current_hank_end = false;
-        for (var i = a_done_idx; i < a.length; a_done_idx = ++i) {
-            if (!a_deleted[i]) {
-                if (!current_hank_end) {
-                    // buffer.push("|   | " + a[i]);
-                    buffer.push({ value : a[i], status : DIFF_NONE });
-                    a_done_idx = ++i;
-                }
+        for (var j = b_done_idx; j < b.length; ++j) {
+            b_done_idx = j + 1;
 
+            if (!b_added[j])
+                break;
+
+            buffer.push({ value : b[j], status : DIFF_ADDED });
+        }
+
+        for (var i = a_done_idx; i < a.length; ++i) {
+            a_done_idx = i + 1;
+
+            if (!a_deleted[i]) {
+                buffer.push({ value : a[i], status : DIFF_NONE });
                 break;
             }
 
             buffer.push({ value : a[i], status : DIFF_DELETED });
-            // buffer.push("| - | " + a[i]);
-            current_hank_end = true;
-        }
-
-        for (var j = b_done_idx; j < b.length; b_done_idx = ++j) {
-            if (!b_added[j]) {
-                b_done_idx = ++j;
-                break;
-            }
-            buffer.push({ value : b[j], status : DIFF_ADDED });
-            // buffer.push("| + | " + b[j]);
         }
     }
 
@@ -61,9 +55,8 @@ function diff(a, b) {
 
     var b_seek_from = 0;
 
-    loop_a:
+    LOOP_A:
     for (var i = 0; i < a_len; ++i) {
-        loop_b:
         for (var j = b_seek_from; j < b_len; ++j) {
             if (a[i] === b[j]) {
                 // 一致した. a の i 行目は削除されていない
@@ -76,7 +69,7 @@ function diff(a, b) {
 
                 b_seek_from = j + 1; // まだ未確定行の開始インデックス
 
-                continue loop_a;
+                continue LOOP_A;
             }
         }
 
@@ -84,6 +77,7 @@ function diff(a, b) {
         a_deleted[i] = true;
     }
 
+    // 最後に残ったモノを added に.
     for (var k = b_seek_from; k < b_len; ++k)
         b_added[k] = true;
 
